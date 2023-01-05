@@ -13,7 +13,8 @@ for file in all_files:
     nn_interval = get_nn_intervals(rr_in_ms, 300,2000,"linear", "acar")
     hr = 60000./np.array(nn_interval)
     plt.plot(hr,marker ='.')
-    plt.show()
+    plt.title('Heart Rate')
+    plt.figure()
     cum_arr = np.array(rr_in_ms).cumsum()
     print(len(cum_arr))
     cum_sec = (cum_arr)/1000
@@ -27,17 +28,16 @@ for file in all_files:
     sliding = 5/60
     iter = int(((duration-process)/sliding)+1)
     print(iter)
-    val = []
+    nn_sub_arr = []
     dfa_val = []
     for i in range(0,iter):
-        var = nn_arr[(cum_sec >= (i*sliding*60)) & (cum_sec <= (i*sliding*60)+(process*60))]
+        nn_time = nn_arr[(cum_sec >= (i*sliding*60)) & (cum_sec <= (i*sliding*60)+(process*60))]
         time_1=cum_sec[(cum_sec >= (i*sliding*60)) & (cum_sec <= (i*sliding*60)+(process*60))]
-        val.append(time_1[-1]/60)
-        # print(vr[0], vr[-1])
-        # print(vr)
-        dfa=DFA(var,4,16)
+        nn_sub_arr.append(time_1[-1]/60)
+        dfa=DFA(nn_time,4,16)
         dfa_val.append(dfa)
-        plt.plot(val,dfa_val,marker='.')
+        plt.plot(nn_sub_arr,dfa_val,marker='.')
         plt.xlabel('Time')
         plt.ylabel('DFA')
+        plt.title('DFA')
     plt.show()
